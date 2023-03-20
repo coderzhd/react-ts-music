@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, useEffect } from 'react'
+import { useRoutes, Link } from 'react-router-dom'
+import { useAppSeletor, useAppDispatch, shallowEqualApp } from './store/index'
+import routes from './router'
+import 'antd/dist/reset.css'
+import AppHeader from '@/components/app-header'
+import AppFooter from '@/components/app-footer'
+import PalySongBar from './views/playsong/paly-song-bar'
+import { fetchSongDetialAction } from './views/playsong/store/song-player'
 
-function App() {
+export default function App() {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(fetchSongDetialAction(167876)), []
+  })
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AppHeader />
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="main">{useRoutes(routes)}</div>
+      </Suspense>
+      <AppFooter />
+      <PalySongBar />
     </div>
-  );
+  )
 }
-
-export default App;
